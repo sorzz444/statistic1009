@@ -1,0 +1,244 @@
+-- =========================
+-- dg1
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg1' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13 t2
+where dcflag=1
+and t2.log_xe_cnt_172800s>=1
+and t2.log_pwd_cnt_172800s>=1
+and t2.log_ip_cnt_172800s>=2
+and zhye_min_72h<1000
+
+union all
+
+-- =========================
+-- dg2
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg2' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13
+where dcflag=1
+and abstr like '%跨行%'
+and amountamt>=10000
+and fnwp=1
+and province not in ('广东')
+and dfzhmc_kh_cnt_1590w<5
+and zhye_min_72h<300
+and log_cnt_2592000s>=1
+
+union all
+
+-- =========================
+-- dg3
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg3' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13 t2
+where dcflag=1
+and abstr like '%跨行%'
+and length(dfzhmc)>4
+and fnwp=1
+and small_prob_kh_amt_72h<3000
+and cum_cnt_3600s>1
+and zhye_min_72h<3000
+and abs((amountamt % 100000)-100000)<10000
+and log_xe_cnt_172800s>=1
+
+union all
+
+-- =========================
+-- dg4
+-- =========================
+--
+select
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg4' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13
+where dcflag=1
+and abstr like '%跨行%'
+and amountamt>=10000
+and fnwp=1
+and province not in ('广东')
+and dfzhmc_kh_cnt_1590w<5
+and zhye_min_72h<300
+and dfzhmc_dffloc_nwp_cnt_10800s>3
+
+union all
+
+-- =========================
+-- dg5
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg5' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13 t2
+where dcflag = 0
+and custname <> dfzhmc
+and lag_in_province not in ('广东')
+and length(dfzhmc) > 4
+and lag_in_fnwp = 1
+and trantime - lag_in_trantime <= 1800
+and cum_cnt_3600s >= 1
+and min_amt_3600s < 1000
+and lag_in_amountamt >= 10000
+and zhye_min_72h < 1000
+
+union all
+
+-- =========================
+-- dg6
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg6' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13
+where dcflag = 0
+and min_amt_604800s < 1000
+and cum_cnt_604800s > 1
+and amountamt > 10000
+and dfzhmc_dffloc_nwp_cnt_604800s > 10
+and zhye_c_min_72h < 5000
+
+union all
+
+-- =========================
+-- dg7
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg7' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13 t2
+where custname<>dfzhmc
+and legal_name<>dfzhmc
+and dcflag=1
+and abstr like '%跨行%'
+and fnwp=1
+and province not in ('广东')
+and dfzhmc_dffloc_nwp_cnt_604800s<=1
+and zhye_c_min_72h<1000
+and log_cnt_1209600s>=1
+and small_prob_kh_amt_72h<1000
+
+union all
+
+-- =========================
+-- dg8
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg8' as ruleid,
+label7
+from fqz.td003649_corp_rt_txn0_trainwb_gs_tmp4_13 t2
+where custname <> dfzhmc
+and legal_name <> dfzhmc
+and dcflag = 1
+and abstr like '%跨行%'
+and fnwp = 1
+and fhh = 1
+and famt_bin = 1
+and province not in ('广东')
+and hh in ('23','00','01')
+and zhye_c_min_72h < 300
+and amountamt >= 10000
+
+
+union all
+
+-- =========================
+-- dg9
+-- =========================
+select
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg9' as ruleid,
+label7
+from fqz.b022_cb_log_new_tmp6_12
+where txn_nmac_pwd_cnt_20d > 1
+and txn_nmac_xe_cnt_20d > 1
+and txn_ip_cnt_20d > 1
+and txn_mac_cnt_20d > 1
+
+union all
+
+-- =========================
+-- dg10
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg10' as ruleid,
+label7
+from fqz.b022_cb_log_new_tmp6_12
+where hh not in ('08','09','10','11','12','13','14','15','16','17','18')
+and txn_fmac_rsk_cnt_0s = 1
+and lgn_txn_amt_max_90d < 500
+and lgn_txn_zhye_max_90d < 500
+
+union all
+
+-- =========================
+-- dg11
+-- =========================
+select 
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg11' as ruleid,
+label7
+from fqz.b022_cb_log_new_tmp6_12
+where acct_open_date >= '2024-04-01'
+and open_days <= 19
+and txn_pwd_cnt_20d > 1
+and txn_xe_cnt_20d > 1
+and txn_ip_cnt_20d > 1
+and txn_mac_cnt_20d > 1;
+
+
+union all
+
+-- =========================
+-- dg12
+-- =========================
+select
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg12' as ruleid,
+label7
+from fqz.b022_cb_log_new_tmp6_12
+where txn_fmac_rsk_cnt_0s = 1
+and lgn_prob_amt_10800s < 1000
+and lgn_prob_zhye_10800s < 1000
+
+union all
+
+-- =========================
+-- dg13
+-- =========================
+select
+from_unixtime(trantime,'yyyy-MM-dd HH:mm:ss') as txn_time,
+cust_id,
+'dg13' as ruleid,
+label7
+from fqz.b022_cb_log_new_tmp6_12
+where hh not in ('08','09','10','11','12','13','14','15','16','17','18')
+and txn_fmac_rsk_cnt_3600s >= 2
+;
+17:30 到 20:00
